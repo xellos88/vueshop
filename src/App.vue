@@ -1,16 +1,37 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div v-for="(item,i) in products" :key="i">
+    <h4>{{ item.name }}</h4>
+    <p>{{ item.price }}원</p>
+  </div>
+  <!-- <div>
+    <h4>{{ product1 }}</h4>
+    <p>{{ price1 }}원</p>
+  </div>
+  <div>
+    <h4 :style='styleR'>{{ product2 }}</h4>
+    <p>{{ price2 }}원</p>
+  </div> -->
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data(){//데이터 바인딩
+    return{
+      products:[
+        {name:'티셔츠',price:'10000'},
+        {name:'바지',price:'20000'},
+        {name:'점퍼',price:'30000'},
+      ],
+      // prices:['10000','20000','30000'],
+      // product1:'티셔츠',
+      // price1:'3,800',
+      // product2:'바지',
+      // price2:'100,000,000',
+      // styleR:'color:red',
+    }
+  },
 }
 </script>
 
