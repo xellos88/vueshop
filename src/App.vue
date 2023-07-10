@@ -4,12 +4,36 @@
 
   <!-- 네비-->
   <Navi :product1="product1" :navList="navList" />
+  <!-- <br>
+  <input type="text" v-model="inputTest">
+  <br>
+  <span>{{ inputTest }}</span>
+  <br> -->
+  <div class="discount" v-if="flg">
+    <p>
+      지금 당장 구매하시면, {{  timerCount }}%할인
+    </p>
+  </div><button @click="hookTest = !hookTest">훅테스트</button>
+  {{ hookTest }}
+  <!-- <div class="startTransition" :class="{endTransition : modalFlg}"> -->
+  <Transition name="modalTransition">
+    <Modal 
+    @closeModal="modalFlg = false;" 
+    :products="products" 
+    :productNum="productNum" 
+    :modalFlg="modalFlg"/>
+  </Transition>
+  <!-- </div> -->
+
+  <ProductList 
+  @openModal="modalFlg = true; productNum = i" 
+  :product="product" 
+  :productNum="productNum" v-for="(product,i) in products" :key="i"/>
   <!-- <div class="nav">
       <a>홈</a>
       <a>상품</a>
       <a>기타</a>
   </div> -->
-
 
   <!-- <div v-for="(item,i) in products" :key="i">
     <img alt="Vue logo" src="./assets/티셔츠.jpg">
@@ -33,14 +57,14 @@
         <button @click="modalFlg = false">닫기</button>
     </div>
   </div> -->
-  <ProductList @openModal="modalFlg = true;" :product="product" v-for="(product,i) in products" :key="i"/>
+
   <!-- <div v-for="(item,i) in products" :key="i">
     <img :src="item.img" style="width:300px; height:300px;">
     <h4 @click="openModal(i)">{{ item.name }}</h4>
     <p>{{ item.price }}원</p>
     <span>수량:{{  products[productNum].count }}개</span>
   </div> -->
-  <Modal @closeModal="modalFlg = false" :modalFlg="modalFlg" :products="products" :productNum="productNum"/>
+
 
   
   <!-- if -->
@@ -67,11 +91,11 @@ export default {
   name: 'App',
   data(){//데이터 바인딩
     return{
-      // products:[
-      //   {name:'티셔츠',price:'10000',count:1},
-      //   {name:'바지',price:'20000',count:1},
-      //   {name:'점퍼',price:'30000',count:1},
-      // ],
+      timerCount:100,
+      flg:false,
+      hookTest:false,
+      inputTest:'',
+      calinput:'',
       navList:['홈','상품','기타'],
       modalFlg : false,
       products: data,
@@ -81,15 +105,41 @@ export default {
       price2:'100,000,000',
       styleR:'color:red',
       productNum:0,
-      // slt: null,
     }
   },
-  methods: {//함수 설정하는 영역
-    plus(i){
-      this.products[i].count++;
+  updated() {
+    this.flg=true;
+  },
+  mounted() {
+  // timerCount 변수를 감시(watch)하여 값이 변경될 때마다 실행되는 콜백 함수를 등록합니다.
+  this.$watch(
+    'timerCount',
+      (value) => {
+            // 값이 0보다 크면 setTimeout을 사용하여 1초 후에 timerCount를 감소시킵니다.
+            if (value > 0) {
+              setTimeout(() => {
+              this.timerCount--;
+            }, 1000);
+          }
+        },
+      { immediate: true } // 즉시 실행 옵션을 설정하여 watch 콜백 함수를 초기 마운트 시에도 실행합니다.
+    );
+  },
+  watch:{ //실시간 감시 함수 정의 영역
+    inputTest(input){
+      if( input == 3)
+      alert('3333');
+      this.inputTest='';
     },
-    minus(i){
+  },
+  methods: {//함수 설정하는 영역
+    plus(i) {
+      this.products[i].count++;
+      this.productPrice = this.products[i].count * this.products[i].price;
+    },
+    minus(i) {
       this.products[i].count--;
+      this.productPrice = this.products[i].count * this.products[i].price;
     },
     // getImagePath(name) {
     //   return require(`@/assets/${name}.jpg`);
@@ -99,12 +149,14 @@ export default {
     //   this.modalFlg = true;
     // },
     openModal(i) {
-      this.productNum = i;
       this.modalFlg = true;
+      this.productNum = i;
+      this.productPrice = this.products[i].price;
+      this.products[i].count = 1;
     },
     cal(price,count){
       return price * count;
-    }
+    },
   },
   components: { //컴포넌트 정의
     Navi,
