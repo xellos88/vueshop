@@ -29,3 +29,41 @@ div{
     padding: 20px;
     margin:20px auto;
 }
+/* .startTransition{
+    opacity: 0;
+    transition: all 1s;
+}
+.endTransition{
+    opacity: 1;
+    transition: all 1s;
+} */
+
+.discount {
+    background-color: magenta;
+    padding:20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: xx-large;
+}
+
+
+/* 입장 */
+.modalTransition-enter-from {
+    opacity: 0;
+}
+.modalTransition-enter-active {
+    transition: all 1s;
+}
+.modalTransition-enter-to {
+    opacity: 1;
+}
+/* 퇴장 */
+.modalTransition-leave-from {
+    opacity: 1;
+}
+.modalTransition-leave-active {
+    transition: all 1s;
+}
+.modalTransition-leave-to {
+    opacity: 0;
+}

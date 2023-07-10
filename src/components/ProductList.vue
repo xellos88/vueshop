@@ -12,10 +12,10 @@ export default {
     name: 'ProductList',
     props: {
         product: Object,
+        productNum: Number,
         // { name: '티셔츠', content: '셔츠셔츠셔츠', price: '10000', count: 1, img: require('@/assets/티셔츠.jpg') },가 오브젝트라서
     }  
 }
 </script>
 <style>
-    
 </style>
